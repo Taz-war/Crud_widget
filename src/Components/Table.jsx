@@ -18,14 +18,12 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
-import {
-  Button,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Button, Snackbar, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 import Row from "./Row";
+import { useContext } from "react";
+import { StateContext } from "../Context/StateProvider";
 
 const ZOHO = window.ZOHO;
 
@@ -33,14 +31,14 @@ const deleteHandle = (d, datas, setSelected) => {
   ZOHO.CRM.API.deleteRecord({
     Entity: "Crud_widget_of_fahim",
     RecordID: d,
-  }).then( (data)=> {
+  }).then((data) => {
     if (data?.data[0].code === "SUCCESS") {
-      d.map((obj,index)=>{
-        const i = datas.findIndex((item)=>item.id===d[index])
-        datas.splice(i,1)
-        setSelected([])
-        console.log(i)
-      })
+      d.map((obj, index) => {
+        const i = datas.findIndex((item) => item.id === d[index]);
+        datas.splice(i, 1);
+        setSelected([]);
+        console.log(i);
+      });
     }
   });
 };
@@ -228,20 +226,21 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({
-  setOpen,
-  searchItem,
-  module,
-  datas,
-  modalSnackBar,
-  setModalSnackBar,
-}) {
+export default function EnhancedTable({datas}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [recordId, setRecordId] = useState([]);
+
+  const {
+    setOpen,
+    searchItem,
+    module,
+    modalSnackBar,
+    setModalSnackBar,
+  } = useContext(StateContext);
 
   let columns = [
     { field: "Name" },

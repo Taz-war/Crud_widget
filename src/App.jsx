@@ -1,19 +1,25 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Table from "./Components/Table";
 import NavBar from "./Components/NavBar";
 import { useEffect, useState } from "react";
 import TransitionsModal from "./Components/Modal";
 import { Box, CircularProgress } from "@mui/material";
+import { useContext } from "react";
+import { StateContext } from "./Context/StateProvider";
 
 const ZOHO = window.ZOHO;
 
 function App() {
-  const [zohoLoaded, setZohoLoaded] = useState(false);
-  const [allData, setAllData] = useState([]);
-  const [loader, setLoader] = useState(false);
-  const [module, setModule] = useState("");
-  const [modalSnackBar, setModalSnackBar] = useState(false);
+  const {
+    allData,
+    setAllData,
+    zohoLoaded,
+    setZohoLoaded,
+    loader,
+    setLoader,
+    module,
+    open,
+  } = useContext(StateContext);
 
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
@@ -45,23 +51,14 @@ function App() {
 
     fetchData();
   }, [module, zohoLoaded]);
-  // console.log(allData);
-  const [open, setOpen] = useState(false);
-  const [searchItem, setSearchItem] = useState("");
-  const [value, setValue] = useState("");
+
   let datas = [];
   datas = allData;
   console.log({ datas });
   return (
     <div className="App">
       <Box margin={"0 auto"} justifyContent={"center"} pt={2}>
-        <NavBar
-          searchItem={searchItem}
-          setSearchItem={setSearchItem}
-          value={value}
-          setValue={setValue}
-          setModule={setModule}
-        />
+        <NavBar />
         {loader && (
           <Box
             sx={{
@@ -74,29 +71,9 @@ function App() {
             <CircularProgress />
           </Box>
         )}
-        <Table
-          setLoader={setLoader}
-          allData={allData}
-          datas={datas}
-          setOpen={setOpen}
-          searchItem={searchItem}
-          value={value}
-          setZohoLoaded={setZohoLoaded}
-          zohoLoaded={zohoLoaded}
-          module={module}
-          modalSnackBar={modalSnackBar}
-          setModalSnackBar={setModalSnackBar}
-        />
+        <Table datas={datas} />
         {zohoLoaded}
-        {open && (
-          <TransitionsModal
-            open={open}
-            setOpen={setOpen}
-            datas={datas}
-            modalSnackBar={modalSnackBar}
-            setModalSnackBar={setModalSnackBar}
-          />
-        )}
+        {open && <TransitionsModal datas={datas} />}
       </Box>
     </div>
   );

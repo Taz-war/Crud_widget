@@ -19,15 +19,19 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { useContext } from "react";
+import { StateContext } from "../Context/StateProvider";
 const ZOHO = window.ZOHO;
 
-export default function TransitionsModal({
-  open,
-  setOpen,
-  datas,
-  modalSnackBar,
-  setModalSnackBar,
-}) {
+export default function TransitionsModal() {
+
+  const {
+    open,
+    setOpen,
+    datas,
+    modalSnackBar,
+    setModalSnackBar,
+  } = useContext(StateContext)
   const { handleSubmit, reset, setValue, control } = useForm({
     mode: "onChange",
   });

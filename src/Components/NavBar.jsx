@@ -3,9 +3,14 @@ import Chip from "@mui/material/Chip";
 import React from "react";
 import { SearchOutlined } from "@mui/icons-material";
 import { useState } from "react";
+import { useContext } from "react";
+import { StateContext } from "../Context/StateProvider";
 // import "./nav.css";
 
-const NavBar = ({ searchItem, setSearchItem, value, setValue, setModule }) => {
+const NavBar = () => {
+
+  const { setSearchItem, setModule }=useContext(StateContext)
+
   const [items, setItems] = useState([
     "Deals",
     "Leads",
